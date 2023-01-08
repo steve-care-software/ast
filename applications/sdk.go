@@ -1,4 +1,4 @@
-package grammars
+package applications
 
 import (
 	"github.com/steve-care-software/ast/domain/grammars"

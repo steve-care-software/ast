@@ -1,6 +1,8 @@
 package coverages
 
 import (
+	"errors"
+
 	"github.com/steve-care-software/ast/domain/trees"
 )
 
@@ -45,5 +47,5 @@ func (app *resultBuilder) Now() (Result, error) {
 		return createResultWithError(app.error), nil
 	}
 
-	return createResult(), nil
+	return nil, errors.New("the Result is invalid")
 }

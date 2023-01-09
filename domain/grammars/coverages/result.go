@@ -7,10 +7,6 @@ type result struct {
 	err  string
 }
 
-func createResult() Result {
-	return createResultInternally(nil, "")
-}
-
 func createResultWithTree(
 	tree trees.Tree,
 ) Result {

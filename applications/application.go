@@ -321,18 +321,22 @@ func (app *application) coverageTokenSuite(token grammars.Token, channels gramma
 		return nil, err
 	}
 
+	resultBuilder := app.coverageResultBuilder.Create()
 	tree, _, err := app.token(token, map[string]*stack{}, nil, channels, false, []byte{}, input)
 	if err != nil {
-		return nil, err
+		if suite.IsValid() {
+			str := fmt.Sprintf("the suite was expected to be valid, error returned: %s", err.Error())
+			resultBuilder.WithError(str)
+		}
 	}
 
-	resultBuilder := app.coverageResultBuilder.Create()
+	if tree != nil && !suite.IsValid() {
+		str := fmt.Sprintf("the suite was expected to be invalid, but it returned valid")
+		resultBuilder.WithError(str)
+	}
+
 	if tree != nil {
 		resultBuilder.WithTree(tree)
-	}
-
-	if err != nil {
-		resultBuilder.WithError(err.Error())
 	}
 
 	result, err := resultBuilder.Now()

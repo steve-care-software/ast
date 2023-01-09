@@ -811,17 +811,25 @@ func (app *application) line(tokenName string, stackMap map[string]*stack, line 
 			remaining = rem
 		}
 
-		contents, err := app.treeContentsBuilder.Create().WithList(contentsList).Now()
-		if err != nil {
-			return nil, nil, nil, err
+		min := int(cardinality.Min())
+		if min > len(contentsList) {
+			str := fmt.Sprintf("the expected minimum content amount (%d) was not reached (%d) and therefore the element is invalid", min, len(contentsList))
+			return nil, nil, nil, errors.New(str)
 		}
 
-		elementIns, err := app.treeElementBuilder.Create().WithGrammar(oneElement).WithContents(contents).Now()
-		if err != nil {
-			return nil, nil, nil, err
-		}
+		if len(contentsList) > 0 {
+			contents, err := app.treeContentsBuilder.Create().WithList(contentsList).Now()
+			if err != nil {
+				return nil, nil, nil, err
+			}
 
-		list = append(list, elementIns)
+			elementIns, err := app.treeElementBuilder.Create().WithGrammar(oneElement).WithContents(contents).Now()
+			if err != nil {
+				return nil, nil, nil, err
+			}
+
+			list = append(list, elementIns)
+		}
 	}
 
 	builder := app.treeLineBuilder.Create().

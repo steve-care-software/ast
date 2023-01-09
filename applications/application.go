@@ -774,7 +774,7 @@ func (app *application) line(tokenName string, stackMap map[string]*stack, line 
 				return nil, nil, nil, err
 			}
 
-			elementIns, err := app.treeElementBuilder.Create().WithContents(contents).Now()
+			elementIns, err := app.treeElementBuilder.Create().WithGrammar(oneContainer).WithContents(contents).Now()
 			if err != nil {
 				return nil, nil, nil, err
 			}
@@ -812,7 +812,7 @@ func (app *application) line(tokenName string, stackMap map[string]*stack, line 
 		}
 
 		min := int(cardinality.Min())
-		if min > len(contentsList) {
+		if len(contentsList) < min {
 			str := fmt.Sprintf("the expected minimum content amount (%d) was not reached (%d) and therefore the element is invalid", min, len(contentsList))
 			return nil, nil, nil, errors.New(str)
 		}
@@ -823,7 +823,7 @@ func (app *application) line(tokenName string, stackMap map[string]*stack, line 
 				return nil, nil, nil, err
 			}
 
-			elementIns, err := app.treeElementBuilder.Create().WithGrammar(oneElement).WithContents(contents).Now()
+			elementIns, err := app.treeElementBuilder.Create().WithGrammar(oneContainer).WithContents(contents).Now()
 			if err != nil {
 				return nil, nil, nil, err
 			}
